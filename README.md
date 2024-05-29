@@ -2,13 +2,14 @@
 
 # Práctica de Comunicación Cliente-Servidor en AWS con Sockets TCP
 
-Este proyecto demuestra cómo configurar y utilizar instancias EC2 en AWS para implementar una comunicación cliente-servidor utilizando sockets TCP en Python.
+Este proyecto demuestra cómo configurar y utilizar instancias EC2 en AWS para implementar una comunicación cliente-servidor utilizando sockets TCP en Python. También incluye instrucciones para realizar la práctica en un solo ordenador.
 
 ## Objetivo
 
 - Configurar una instancia EC2 en AWS.
 - Implementar un servidor o un cliente en Python para establecer comunicación utilizando sockets TCP.
 - Experimentar con la comunicación entre instancias EC2 en la nube.
+- Alternativamente, realizar la práctica en un solo ordenador.
 
 ## Instrucciones
 
@@ -110,7 +111,97 @@ Este proyecto demuestra cómo configurar y utilizar instancias EC2 en AWS para i
 
 2. Sigue las instrucciones en pantalla para enviar mensajes entre el cliente y el servidor. El cliente enviará un mensaje al servidor y recibirá una respuesta.
 
+### Alternativa: Realizar la Práctica en un Solo Ordenador
+
+Si prefieres realizar la práctica en un solo ordenador, puedes simular las instancias EC2 ejecutando tanto el servidor como el cliente en tu máquina local. Sigue estos pasos:
+
+#### Implementación del Servidor y el Cliente
+
+##### Código del Servidor
+
+1. Crea un archivo llamado `server.py` con el siguiente contenido:
+    ```python
+    import socket
+
+    # Dirección IP y puerto en el que el servidor va a escuchar
+    HOST = '127.0.0.1'
+    PORT = 8080
+
+    # Crear un socket TCP/IP
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Asociar el socket a la dirección y puerto especificados
+        s.bind((HOST, PORT))
+        # Esperar por conexiones entrantes (máximo 1 cliente en la cola)
+        s.listen(1)
+        print('Esperando conexiones entrantes...')
+        # Aceptar la conexión entrante
+        conn, addr = s.accept()
+        with conn:
+            print('Conexión entrante desde:', addr)
+            while True:
+                # Recibir datos del cliente
+                data = conn.recv(1024)
+                if not data:
+                    break
+                print('Mensaje recibido del cliente:', data.decode())
+                # Enviar respuesta al cliente
+                response = input('Escribe tu mensaje al cliente: ')
+                conn.sendall(response.encode())
+    ```
+
+2. Guarda el archivo y ejecuta el servidor:
+    ```bash
+    python3 server.py
+    ```
+
+##### Código del Cliente
+
+1. Crea un archivo llamado `client.py` con el siguiente contenido:
+    ```python
+    import socket
+
+    # Dirección IP y puerto del servidor
+    HOST = '127.0.0.1'
+    PORT = 8080
+
+    # Crear un socket TCP/IP
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Conectar el socket al servidor
+        s.connect((HOST, PORT))
+        while True:
+            # Enviar un mensaje al servidor
+            message = input('Escribe tu mensaje al servidor: ')
+            s.sendall(message.encode())
+            # Recibir respuesta del servidor
+            data = s.recv(1024)
+            print('Respuesta del servidor:', data.decode())
+    ```
+
+2. Guarda el archivo y ejecuta el cliente en una nueva terminal:
+    ```bash
+    python3 client.py
+    ```
+
+#### Ejecución y Prueba
+
+1. **Ejecuta el servidor:**
+    - Abre una terminal y ejecuta el servidor con el siguiente comando:
+      ```bash
+      python3 server.py
+      ```
+
+2. **Ejecuta el cliente:**
+    - Abre otra terminal y ejecuta el cliente con el siguiente comando:
+      ```bash
+      python3 client.py
+      ```
+
+3. **Interacción:**
+    - Sigue las instrucciones en pantalla para enviar mensajes entre el cliente y el servidor. El cliente enviará un mensaje al servidor y recibirá una respuesta.
+
 ## Conclusión
 
-Esta práctica proporciona una comprensión básica de cómo configurar y utilizar instancias EC2 en AWS para implementar una comunicación cliente-servidor utilizando sockets TCP en Python. Siguiendo estos pasos, puedes experimentar con la comunicación entre instancias en la nube y entender mejor cómo funciona la red y la programación de sockets.
+Esta práctica proporciona una comprensión básica de cómo configurar y utilizar instancias EC2 en AWS para implementar una comunicación cliente-servidor utilizando sockets TCP en Python. También ofrece una alternativa para realizar la práctica en un solo ordenador, lo cual es útil para fines de aprendizaje y desarrollo local. Siguiendo estos pasos, puedes experimentar con la comunicación entre cliente y servidor de manera efectiva en tu propio entorno local o en la nube.
+
+
 
