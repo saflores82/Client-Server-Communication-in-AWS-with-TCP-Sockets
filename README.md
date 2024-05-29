@@ -1,7 +1,5 @@
 # Client-Server-Communication-in-AWS-with-TCP-Sockets
 
-Práctica de Comunicación Cliente-Servidor en AWS con Sockets TCP
-
 # Práctica de Comunicación Cliente-Servidor en AWS con Sockets TCP
 
 Este proyecto demuestra cómo configurar y utilizar instancias EC2 en AWS para implementar una comunicación cliente-servidor utilizando sockets TCP en Python.
